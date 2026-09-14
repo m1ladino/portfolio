@@ -25,8 +25,48 @@
   ::selection { background: #ffffff; color: #0a0a0a; }
   input::placeholder, textarea::placeholder { color: #8e8e96; }
   select option { background: #101012; color: #eaeaea; }
-  @media (max-width: 640px) { [data-om-grananje] { display: none; } }
+  @media (max-width: 640px) { [data-om-grananje] { display: none !important; } [data-om-grananje-m] { display: block !important; } }
+  @media (max-width: 760px) {
+    [data-m="nav"] { display: none !important; }
+    [data-m="burger"] { display: flex !important; }
+    [data-m="usluge"], [data-m="brojevi"], [data-m="simke"], [data-m="preporuke"] { grid-template-columns: 1fr !important; }
+    [data-m="preporuke"] > div { box-shadow: none !important; transform: none !important; }
+    [data-m="red"] { flex-direction: column !important; align-items: flex-start !important; gap: 6px !important; }
+    [data-m="desno"] { text-align: left !important; }
+    [data-m="brojevi"] p[data-m="oznaka"] { min-height: 0 !important; }
+  }
+  @media (max-width: 640px) {
+    [data-m="hero"] { min-height: 100dvh !important; justify-content: flex-start !important; gap: 28px !important; }
+    [data-m="heroTekst"] { min-height: calc(100dvh - 260px); justify-content: center; gap: 40px !important; }
+    [data-m="heroTekst"] > div:first-child { width: 120px !important; height: 120px !important; }
+    [data-m="heroTekst"] h1 { font-size: 40px !important; max-width: 20ch !important; }
+    [data-m="brMob"] { display: block !important; }
+    [data-m="preporuke"] { display: flex !important; grid-template-columns: none !important; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; gap: 14px !important; padding-bottom: 4px; }
+    [data-m="preporuke"]::-webkit-scrollbar { display: none; }
+    [data-m="preporuke"] > div { flex: 0 0 100%; scroll-snap-align: center; opacity: 1 !important; transform: none !important; }
+    [data-m="tacke"] { display: flex !important; }
+  }
+  @media (max-width: 760px) {
+    [data-reveal], [data-m="red"] { opacity: 0; transform: translateY(20px); transition: opacity 560ms ease-out, transform 560ms cubic-bezier(.2,.7,.3,1); }
+    [data-reveal].om-vis, [data-m="red"].om-vis { opacity: 1; transform: none; }
+  }
+  @keyframes omPojava { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes omSpusti { from { transform: translateY(-102%); } to { transform: none; } }
+  @keyframes omStavka { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
   @keyframes omPadaj { from { opacity: 0; transform: translateY(-6px) scale(.985); } to { opacity: 1; transform: none; } }
+  @keyframes omKometa {
+    0%   { top: -40px; opacity: 0; }
+    16%  { opacity: 1; }
+    62%  { opacity: 1; }
+    74%  { top: 100%; opacity: 0; }
+    100% { top: 100%; opacity: 0; }
+  }
+  @keyframes omPuls {
+    0%, 58%  { opacity: 0; transform: scale(.7); }
+    70%      { opacity: .4; transform: scale(1); }
+    84%      { opacity: 0; transform: scale(1.35); }
+    100%     { opacity: 0; transform: scale(.7); }
+  }
   :focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -35,103 +75,187 @@
 </style>
 </helmet>
 
-<header style="position:relative; z-index:60; margin-bottom:-92px; padding:20px max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)); background:transparent;">
+<header style="position:relative; z-index:60; margin-bottom:-92px; padding:calc(20px + env(safe-area-inset-top)) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) 20px; background:transparent;">
   <div style="max-width:1040px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:24px;">
-    <a href="#gore" style="font-size:21px; font-weight:500; letter-spacing:-0.01em; color:#dadada; transition:color 200ms ease-out;" style-hover="color:#ffffff;">Trifke</a>
-    <nav aria-label="Glavna navigacija" style="display:flex; align-items:center; gap:clamp(20px,2.8vw,44px);">
-      <a href="#radovi" style="font-size:18px; font-weight:400; color:#dadada; transition:color 200ms ease-out;" style-hover="color:#ffffff;">Radovi</a>
-      <a href="#alati" style="font-size:18px; font-weight:400; color:#dadada; transition:color 200ms ease-out;" style-hover="color:#ffffff;">Alati</a>
-      <a href="#o-meni" style="font-size:18px; font-weight:400; color:#dadada; transition:color 200ms ease-out;" style-hover="color:#ffffff;">O meni</a>
-      <a href="#kontakt" style="font-size:18px; font-weight:400; color:#dadada; transition:color 200ms ease-out;" style-hover="color:#ffffff;">Kontakt</a>
+    <a href="#gore" style="font-size:20px; font-weight:500; letter-spacing:-0.01em; color:#dadada; transition:color 200ms ease-out;" style-hover="color:#ffffff;">Trifke</a>
+    <nav data-m="nav" aria-label="Glavna navigacija" style="display:flex; align-items:center; gap:clamp(20px,2.8vw,44px);">
+      <a href="#radovi" style="font-size:16px; font-weight:400; color:#dadada; transition:color 200ms ease-out;" style-hover="color:#ffffff;">Radovi</a>
+      <a href="#alati" style="font-size:16px; font-weight:400; color:#dadada; transition:color 200ms ease-out;" style-hover="color:#ffffff;">Alati</a>
+      <a href="#o-meni" style="font-size:16px; font-weight:400; color:#dadada; transition:color 200ms ease-out;" style-hover="color:#ffffff;">O meni</a>
+      <a href="#kontakt" style="font-size:16px; font-weight:400; color:#dadada; transition:color 200ms ease-out;" style-hover="color:#ffffff;">Kontakt</a>
     </nav>
+    <button type="button" data-m="burger" onClick="{{ otvoriMeni }}" aria-label="Otvori meni" aria-expanded="{{ meniOtvoren }}" style="display:none; align-items:center; justify-content:center; width:48px; height:48px; margin:-12px -12px -12px 0; border:none; background:transparent; color:#dadada; cursor:pointer; transition:color 200ms ease-out;" style-hover="color:#ffffff;">
+      <span aria-hidden="true" style="display:flex; flex-direction:column; justify-content:center; gap:7px; width:24px;">
+        <span style="display:block; height:1.5px; border-radius:2px; background:currentColor;"></span>
+        <span style="display:block; height:1.5px; border-radius:2px; background:currentColor;"></span>
+      </span>
+    </button>
   </div>
 </header>
+
+<sc-if value="{{ meniOtvoren }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed; inset:0; z-index:200;">
+    <div onClick="{{ zatvoriMeni }}" style="position:absolute; inset:0; background:rgba(6,6,8,.6); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px); animation:omPojava 220ms ease-out both;"></div>
+    <div style="position:absolute; top:0; left:0; right:0; overflow:hidden; padding:calc(24px + env(safe-area-inset-top)) clamp(36px,9vw,56px) 30px; border-radius:0 0 36px 36px; background:linear-gradient(178deg, rgba(20,17,29,.97) 0%, rgba(11,11,14,.98) 72%, rgba(9,9,11,.99) 100%); box-shadow:0 34px 80px rgba(0,0,0,.58); animation:omSpusti 420ms cubic-bezier(.16,.84,.24,1) both;">
+      <div aria-hidden="true" style="position:absolute; top:-40%; left:-10%; width:70%; height:110%; pointer-events:none; background:radial-gradient(50% 50% at 50% 50%, rgba(118,74,190,.28), rgba(118,74,190,0) 72%);"></div>
+      <div aria-hidden="true" style="position:absolute; bottom:0; left:clamp(36px,9vw,56px); right:clamp(36px,9vw,56px); height:1px; background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.16) 30%, rgba(255,255,255,.16) 70%, rgba(255,255,255,0));"></div>
+      <div style="position:relative; display:flex; align-items:center; justify-content:space-between; gap:24px;">
+        <a href="#gore" onClick="{{ zatvoriMeni }}" style="font-size:36px; font-weight:400; letter-spacing:-0.03em; line-height:1.16; color:#a8a8b0; transition:color 200ms ease-out;" style-hover="color:#ffffff;">Trifke</a>
+        <button type="button" onClick="{{ zatvoriMeni }}" aria-label="Zatvori meni" style="display:flex; align-items:center; justify-content:center; width:48px; height:48px; margin:-12px -12px -12px 0; border:none; background:transparent; color:#a8a8b0; cursor:pointer; transition:color 200ms ease-out, transform 240ms cubic-bezier(.2,.7,.3,1);" style-hover="color:#ffffff; transform:rotate(90deg);">
+          <span aria-hidden="true" style="position:relative; display:block; width:24px; height:24px;">
+            <span style="position:absolute; top:11px; left:0; width:24px; height:1.6px; border-radius:2px; background:currentColor; transform:rotate(45deg);"></span>
+            <span style="position:absolute; top:11px; left:0; width:24px; height:1.6px; border-radius:2px; background:currentColor; transform:rotate(-45deg);"></span>
+          </span>
+        </button>
+      </div>
+      <nav aria-label="Mobilna navigacija" style="position:relative; display:flex; flex-direction:column; padding:28px 0 24px;">
+        <a href="#radovi" onClick="{{ zatvoriMeni }}" style="display:flex; align-items:center; gap:16px; padding:10px 0; color:#f4f4f6; transition:opacity 220ms ease-out, transform 260ms cubic-bezier(.2,.7,.3,1); animation:omStavka 380ms cubic-bezier(.2,.7,.3,1) 60ms both;" style-hover="transform:translateX(3px); color:#ffffff;">
+          <span style="font-size:36px; font-weight:400; line-height:1.16; letter-spacing:-0.03em;">Radovi</span>
+          <span aria-hidden="true" style="position:relative; flex:none; display:block; width:24px; height:24px; margin-left:auto; color:#8a8a94; transition:transform 300ms cubic-bezier(.2,.8,.26,1), color 240ms ease-out;">
+            <span style="position:absolute; top:50%; left:2px; width:20px; height:1.4px; border-radius:2px; background:currentColor; transform:rotate(-45deg);"></span>
+            <span style="position:absolute; top:2px; right:2px; width:9px; height:9px; border-top:1.4px solid currentColor; border-right:1.4px solid currentColor; border-radius:1px;"></span>
+          </span>
+        </a>
+        <a href="#alati" onClick="{{ zatvoriMeni }}" style="display:flex; align-items:center; gap:16px; padding:10px 0; color:#f4f4f6; transition:opacity 220ms ease-out, transform 260ms cubic-bezier(.2,.7,.3,1); animation:omStavka 380ms cubic-bezier(.2,.7,.3,1) 110ms both;" style-hover="transform:translateX(3px); color:#ffffff;">
+          <span style="font-size:36px; font-weight:400; line-height:1.16; letter-spacing:-0.03em;">Alati</span>
+          <span aria-hidden="true" style="position:relative; flex:none; display:block; width:24px; height:24px; margin-left:auto; color:#8a8a94; transition:transform 300ms cubic-bezier(.2,.8,.26,1), color 240ms ease-out;">
+            <span style="position:absolute; top:50%; left:2px; width:20px; height:1.4px; border-radius:2px; background:currentColor; transform:rotate(-45deg);"></span>
+            <span style="position:absolute; top:2px; right:2px; width:9px; height:9px; border-top:1.4px solid currentColor; border-right:1.4px solid currentColor; border-radius:1px;"></span>
+          </span>
+        </a>
+        <a href="#o-meni" onClick="{{ zatvoriMeni }}" style="display:flex; align-items:center; gap:16px; padding:10px 0; color:#f4f4f6; transition:opacity 220ms ease-out, transform 260ms cubic-bezier(.2,.7,.3,1); animation:omStavka 380ms cubic-bezier(.2,.7,.3,1) 160ms both;" style-hover="transform:translateX(3px); color:#ffffff;">
+          <span style="font-size:36px; font-weight:400; line-height:1.16; letter-spacing:-0.03em;">O meni</span>
+          <span aria-hidden="true" style="position:relative; flex:none; display:block; width:24px; height:24px; margin-left:auto; color:#8a8a94; transition:transform 300ms cubic-bezier(.2,.8,.26,1), color 240ms ease-out;">
+            <span style="position:absolute; top:50%; left:2px; width:20px; height:1.4px; border-radius:2px; background:currentColor; transform:rotate(-45deg);"></span>
+            <span style="position:absolute; top:2px; right:2px; width:9px; height:9px; border-top:1.4px solid currentColor; border-right:1.4px solid currentColor; border-radius:1px;"></span>
+          </span>
+        </a>
+        <a href="#kontakt" onClick="{{ zatvoriMeni }}" style="display:flex; align-items:center; gap:16px; padding:10px 0 0; color:#f4f4f6; transition:opacity 220ms ease-out, transform 260ms cubic-bezier(.2,.7,.3,1); animation:omStavka 380ms cubic-bezier(.2,.7,.3,1) 210ms both;" style-hover="transform:translateX(3px); color:#ffffff;">
+          <span style="font-size:36px; font-weight:400; line-height:1.16; letter-spacing:-0.03em;">Kontakt</span>
+          <span aria-hidden="true" style="position:relative; flex:none; display:block; width:24px; height:24px; margin-left:auto; color:#8a8a94; transition:transform 300ms cubic-bezier(.2,.8,.26,1), color 240ms ease-out;">
+            <span style="position:absolute; top:50%; left:2px; width:20px; height:1.4px; border-radius:2px; background:currentColor; transform:rotate(-45deg);"></span>
+            <span style="position:absolute; top:2px; right:2px; width:9px; height:9px; border-top:1.4px solid currentColor; border-right:1.4px solid currentColor; border-radius:1px;"></span>
+          </span>
+        </a>
+      </nav>
+      <div style="position:relative; display:flex; align-items:center; justify-content:flex-start; animation:omStavka 380ms cubic-bezier(.2,.7,.3,1) 270ms both;">
+        <a href="{{ instagram }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram" style="display:flex; align-items:center; justify-content:center; width:56px; height:56px; margin-left:-14px; color:#a8a8b0; transition:color 200ms ease-out, transform 240ms cubic-bezier(.2,.7,.3,1);" style-hover="color:#ffffff; transform:translateY(-2px);">
+          <span aria-hidden="true" style="display:flex; align-items:center; justify-content:center; position:relative; width:28px; height:28px; border:2px solid currentColor; border-radius:9px;">
+            <span aria-hidden="true" style="display:block; width:11px; height:11px; border:2px solid currentColor; border-radius:50%;"></span>
+            <span aria-hidden="true" style="position:absolute; top:3.5px; right:3.5px; width:3.4px; height:3.4px; border-radius:50%; background:currentColor;"></span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</sc-if>
 
 <main id="gore" style="position:relative;">
   <div aria-hidden="true" style="position:fixed; inset:0; z-index:0; pointer-events:none; background:radial-gradient(52% 46% at 20% 32%, rgba(118,74,190,.42), rgba(118,74,190,0) 72%), radial-gradient(50% 44% at 82% 26%, rgba(40,120,140,.34), rgba(40,120,140,0) 74%), radial-gradient(46% 40% at 70% 86%, rgba(118,74,190,.26), rgba(118,74,190,0) 74%), radial-gradient(44% 38% at 12% 78%, rgba(40,120,140,.2), rgba(40,120,140,0) 76%), radial-gradient(80% 50% at 50% 50%, rgba(255,255,255,.045), rgba(255,255,255,0) 72%);"></div>
   <div aria-hidden="true" style="position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.22; background-image:url('./grain.png'); background-size:256px 256px; background-repeat:repeat;"></div>
   <sc-if value="{{ jeHome }}" hint-placeholder-val="{{ true }}">
 
-  <section style="position:relative; min-height:calc(100vh - 66px); display:flex; flex-direction:column; justify-content:center; gap:clamp(40px,5.5vw,80px); padding:clamp(40px,5vw,72px) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(32px,4vw,56px);">
-    <div style="max-width:1040px; margin:0 auto; width:100%; display:flex; flex-direction:column; align-items:center; text-align:center; gap:clamp(28px,3.4vw,48px);">
+  <section data-m="hero" style="position:relative; min-height:calc(100vh - 66px); display:flex; flex-direction:column; justify-content:center; gap:clamp(40px,5.5vw,80px); padding:clamp(60px,7vw,104px) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(32px,4vw,56px);">
+    <div data-m="heroTekst" style="max-width:1040px; margin:0 auto; width:100%; display:flex; flex-direction:column; align-items:center; text-align:center; gap:clamp(28px,3.4vw,48px);">
       <div style="width:clamp(104px,11vw,132px); height:clamp(104px,11vw,132px); border-radius:50%; overflow:hidden; background:#161616; border:1px solid rgba(255,255,255,.1);">
         <img src="./trifke-portret.png" alt="Trifke" style="display:block; width:100%; height:100%; object-fit:cover; object-position:50% 22%;">
       </div>
-      <h1 style="margin:0; font-size:clamp(30px,4vw,50px); font-weight:400; line-height:1.18; letter-spacing:-0.022em; color:#ffffff; max-width:26ch; text-wrap:balance;">Ja sam Trifke, gradim digitalna rešenja koja vaš posao čine jednostavnijim i efikasnijim.</h1>
+      <h1 data-reveal="true" style="margin:0; font-size:round(clamp(32px,4vw,52px), 4px); font-weight:400; line-height:1.18; letter-spacing:-0.022em; color:#ffffff; max-width:26ch; text-wrap:balance;">Ja sam Trifke,<br data-m="brMob" style="display:none;"> gradim digitalna rešenja<br data-m="brMob" style="display:none;"> koja vaš posao čine<br data-m="brMob" style="display:none;"> jednostavnijim i efikasnijim.</h1>
     </div>
     <div data-om-grananje="true" aria-hidden="true" style="position:relative; max-width:1040px; margin:clamp(-28px,-3vw,-20px) auto clamp(-40px,-5.5vw,-80px); width:100%; height:clamp(56px,6vw,88px); display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:clamp(14px,1.8vw,24px);">
       <div style="position:absolute; top:38%; left:calc((100% - 2 * clamp(14px,1.8vw,24px)) / 6); right:calc((100% - 2 * clamp(14px,1.8vw,24px)) / 6); height:1px; background:rgba(255,255,255,.4); box-shadow:0 0 8px rgba(255,255,255,.28);"></div>
       <div style="position:relative;">
         <div style="position:absolute; top:38%; bottom:0; left:50%; width:1px; background:linear-gradient(180deg, rgba(255,255,255,.1) 0%, rgba(255,255,255,.5) 100%); box-shadow:0 0 8px rgba(255,255,255,.28);"></div>
         <div style="position:absolute; bottom:-3px; left:calc(50% - 3px); width:6px; height:6px; border-radius:50%; background:#ffffff; box-shadow:0 0 12px rgba(255,255,255,.55);"></div>
+        <div aria-hidden="true" style="position:absolute; top:38%; bottom:0; left:calc(50% - 1px); width:3px; overflow:hidden;">
+          <div style="position:absolute; left:0; width:3px; height:40px; border-radius:2px; transform-origin:50% 100%; background:linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.35) 62%, #ffffff 100%); box-shadow:0 0 12px rgba(255,255,255,.45); animation:omKometa 4.2s cubic-bezier(.33,0,.24,1) infinite;"></div>
+        </div>
+        <div aria-hidden="true" style="position:absolute; bottom:-9px; left:calc(50% - 9px); width:18px; height:18px; border-radius:50%; border:1px solid rgba(255,255,255,.7); opacity:0; animation:omPuls 4.2s cubic-bezier(.33,0,.24,1) infinite;"></div>
       </div>
       <div style="position:relative;">
         <div style="position:absolute; top:0; left:50%; width:1px; height:38%; background:linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.46) 100%); box-shadow:0 0 8px rgba(255,255,255,.28);"></div>
         <div style="position:absolute; top:38%; bottom:0; left:50%; width:1px; background:linear-gradient(180deg, rgba(255,255,255,.1) 0%, rgba(255,255,255,.5) 100%); box-shadow:0 0 8px rgba(255,255,255,.28);"></div>
         <div style="position:absolute; top:calc(38% - 3.5px); left:calc(50% - 3.5px); width:7px; height:7px; border-radius:50%; background:#ffffff; box-shadow:0 0 16px rgba(255,255,255,.6);"></div>
         <div style="position:absolute; bottom:-3px; left:calc(50% - 3px); width:6px; height:6px; border-radius:50%; background:#ffffff; box-shadow:0 0 12px rgba(255,255,255,.55);"></div>
+        <div aria-hidden="true" style="position:absolute; top:38%; bottom:0; left:calc(50% - 1px); width:3px; overflow:hidden;">
+          <div style="position:absolute; left:0; width:3px; height:40px; border-radius:2px; transform-origin:50% 100%; background:linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.35) 62%, #ffffff 100%); box-shadow:0 0 12px rgba(255,255,255,.45); animation:omKometa 4.2s cubic-bezier(.33,0,.24,1) infinite;"></div>
+        </div>
+        <div aria-hidden="true" style="position:absolute; bottom:-9px; left:calc(50% - 9px); width:18px; height:18px; border-radius:50%; border:1px solid rgba(255,255,255,.7); opacity:0; animation:omPuls 4.2s cubic-bezier(.33,0,.24,1) infinite;"></div>
       </div>
       <div style="position:relative;">
         <div style="position:absolute; top:38%; bottom:0; left:50%; width:1px; background:linear-gradient(180deg, rgba(255,255,255,.1) 0%, rgba(255,255,255,.5) 100%); box-shadow:0 0 8px rgba(255,255,255,.28);"></div>
         <div style="position:absolute; bottom:-3px; left:calc(50% - 3px); width:6px; height:6px; border-radius:50%; background:#ffffff; box-shadow:0 0 12px rgba(255,255,255,.55);"></div>
+        <div aria-hidden="true" style="position:absolute; top:38%; bottom:0; left:calc(50% - 1px); width:3px; overflow:hidden;">
+          <div style="position:absolute; left:0; width:3px; height:40px; border-radius:2px; transform-origin:50% 100%; background:linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.35) 62%, #ffffff 100%); box-shadow:0 0 12px rgba(255,255,255,.45); animation:omKometa 4.2s cubic-bezier(.33,0,.24,1) infinite;"></div>
+        </div>
+        <div aria-hidden="true" style="position:absolute; bottom:-9px; left:calc(50% - 9px); width:18px; height:18px; border-radius:50%; border:1px solid rgba(255,255,255,.7); opacity:0; animation:omPuls 4.2s cubic-bezier(.33,0,.24,1) infinite;"></div>
       </div>
     </div>
     </div>
-    <div style="max-width:1040px; margin:0 auto; width:100%; display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:clamp(14px,1.8vw,24px);">
-      <div style="border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:clamp(16px,1.7vw,20px) clamp(14px,1.5vw,18px); text-align:center;">
-        <p style="margin:0 0 5px; font-size:15px; font-weight:600; line-height:1.3; color:#ffffff;">Web sajtovi</p>
-        <p style="margin:0; font-size:14px; line-height:1.45; color:#c6c6cb; text-wrap:pretty;">Da vas klijenti pronađu i kontaktiraju online.</p>
+    <div data-om-grananje-m="true" aria-hidden="true" style="display:none; position:relative; max-width:1040px; margin:-34px auto -18px; width:100%; height:72px;">
+      <div style="position:absolute; top:0; bottom:0; left:calc(50% - 0.5px); width:1px; background:linear-gradient(180deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.5) 100%); box-shadow:0 0 8px rgba(255,255,255,.24);"></div>
+      <div style="position:absolute; top:-3px; left:calc(50% - 3px); width:6px; height:6px; border-radius:50%; background:#ffffff; box-shadow:0 0 14px rgba(255,255,255,.5);"></div>
+      <div style="position:absolute; bottom:-3px; left:calc(50% - 3px); width:6px; height:6px; border-radius:50%; background:#ffffff; box-shadow:0 0 14px rgba(255,255,255,.55);"></div>
+      <div style="position:absolute; top:0; bottom:0; left:calc(50% - 1.5px); width:3px; overflow:hidden;">
+        <div style="position:absolute; left:0; width:3px; height:34px; border-radius:2px; background:linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.35) 62%, #ffffff 100%); box-shadow:0 0 12px rgba(255,255,255,.45); animation:omKometa 4.2s cubic-bezier(.33,0,.24,1) infinite;"></div>
       </div>
-      <div style="border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:clamp(16px,1.7vw,20px) clamp(14px,1.5vw,18px); text-align:center;">
-        <p style="margin:0 0 5px; font-size:15px; font-weight:600; line-height:1.3; color:#ffffff;">Web aplikacije</p>
-        <p style="margin:0; font-size:14px; line-height:1.45; color:#c6c6cb; text-wrap:pretty;">Za jednostavnije zakazivanje, naručivanje i evidenciju.</p>
+      <div style="position:absolute; bottom:-9px; left:calc(50% - 9px); width:18px; height:18px; border-radius:50%; border:1px solid rgba(255,255,255,.7); opacity:0; animation:omPuls 4.2s cubic-bezier(.33,0,.24,1) infinite;"></div>
+    </div>
+    <div data-m="usluge" style="max-width:1040px; margin:0 auto; width:100%; display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:clamp(14px,1.8vw,24px);">
+      <div data-reveal="true" style="border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:clamp(16px,1.7vw,20px) clamp(14px,1.5vw,18px); text-align:center;">
+        <p style="margin:0 0 5px; font-size:16px; font-weight:600; line-height:1.3; color:#ffffff;">Web sajtovi</p>
+        <p style="margin:0; font-size:16px; line-height:1.45; color:#c6c6cb; text-wrap:pretty;">Da vas klijenti pronađu<br data-m="brMob" style="display:none;"> i kontaktiraju online.</p>
       </div>
-      <div style="border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:clamp(16px,1.7vw,20px) clamp(14px,1.5vw,18px); text-align:center;">
-        <p style="margin:0 0 5px; font-size:15px; font-weight:600; line-height:1.3; color:#ffffff;">Automatizacija posla</p>
-        <p style="margin:0; font-size:14px; line-height:1.45; color:#c6c6cb; text-wrap:pretty;">Manje ručnog rada, više automatizovanih procesa.</p>
+      <div data-reveal="true" style="border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:clamp(16px,1.7vw,20px) clamp(14px,1.5vw,18px); text-align:center;">
+        <p style="margin:0 0 5px; font-size:16px; font-weight:600; line-height:1.3; color:#ffffff;">Web aplikacije</p>
+        <p style="margin:0; font-size:16px; line-height:1.45; color:#c6c6cb; text-wrap:pretty;">Za jednostavnije zakazivanje, naručivanje i evidenciju.</p>
+      </div>
+      <div data-reveal="true" style="border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:clamp(16px,1.7vw,20px) clamp(14px,1.5vw,18px); text-align:center;">
+        <p style="margin:0 0 5px; font-size:16px; font-weight:600; line-height:1.3; color:#ffffff;">Automatizacija posla</p>
+        <p style="margin:0; font-size:16px; line-height:1.45; color:#c6c6cb; text-wrap:pretty;">Manje ručnog rada, više<br data-m="brMob" style="display:none;"> automatizovanih procesa.</p>
       </div>
     </div>
   </section>
 
   <section id="radovi" style="position:relative; padding:0 max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(40px,4.5vw,64px);">
-    <h2 style="margin:0 0 clamp(32px,4vw,56px); text-align:center; font-size:clamp(28px,3.6vw,44px); font-weight:400; line-height:1.1; letter-spacing:-0.02em; color:#f8f8f8;">Izabrani radovi</h2>
+    <h2 data-reveal="true" style="margin:0 0 clamp(32px,4vw,56px); text-align:center; font-size:round(clamp(28px,3.6vw,44px), 4px); font-weight:400; line-height:1.1; letter-spacing:-0.02em; color:#f8f8f8;">Izabrani radovi</h2>
     <div style="max-width:1040px; margin:0 auto; display:flex; flex-direction:column; gap:clamp(24px,3vw,40px);">
 
-      <article style="position:relative; overflow:hidden; border-radius:32px; background:linear-gradient(180deg, #0f1720 0%, #0b0f14 62%, #0a0a0a 100%); padding:clamp(24px,3vw,48px);">
+      <article data-reveal="true" style="position:relative; overflow:hidden; border-radius:32px; background:linear-gradient(180deg, #0f1720 0%, #0b0f14 62%, #0a0a0a 100%); padding:clamp(24px,3vw,48px);">
         <img src="./kutak-mockup.png" alt="KUTAK — sajt bistroa i bara" style="display:block; width:100%; height:auto; border-radius:14px; box-shadow:0 22px 54px rgba(0,0,0,.45);">
         <div style="display:flex; flex-wrap:wrap; gap:clamp(24px,3vw,44px); align-items:flex-start; padding-top:clamp(28px,3.4vw,44px);">
           <div style="flex:1 1 300px; min-width:0;">
-            <h3 style="margin:0 0 12px; font-size:clamp(24px,2.8vw,34px); font-weight:400; line-height:1.15; letter-spacing:-0.02em; color:#ffffff;">Sajt za bistro i bar</h3>
+            <h3 style="margin:0 0 12px; font-size:round(clamp(24px,2.8vw,36px), 4px); font-weight:400; line-height:1.15; letter-spacing:-0.02em; color:#ffffff;">Sajt za bistro i bar</h3>
             <p style="margin:0; font-size:16px; line-height:1.6; color:#c9c9cd; max-width:46ch; text-wrap:pretty;">Rezervacije i pitanja o meniju stizali su samo telefonom, u toku smene. Sada rezervacija dolazi zapisana — datum, vreme i broj osoba.</p>
           </div>
-          <div style="flex:1 1 260px; min-width:0; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap:clamp(18px,2vw,28px);">
+          <div data-m="brojevi" style="flex:1 1 260px; min-width:0; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap:clamp(18px,2vw,28px);">
             <div style="min-width:0;">
-            <p style="margin:0 0 12px; min-height:44px; font-size:17px; font-weight:400; line-height:1.3; color:#c4c4c4;">Pogrešno zapamćenih rezervacija</p>
-            <p style="margin:0; font-size:clamp(34px,4vw,48px); font-weight:400; line-height:1; letter-spacing:-0.03em; color:#ffffff;">0</p>
+            <p data-m="oznaka" style="margin:0 0 12px; min-height:44px; font-size:16px; font-weight:400; line-height:1.3; color:#c4c4c4;">Pogrešno zapamćenih rezervacija</p>
+            <p style="margin:0; font-size:round(clamp(36px,4vw,48px), 4px); font-weight:400; line-height:1; letter-spacing:-0.03em; color:#ffffff;">0</p>
           </div>
             <div style="min-width:0;">
-            <p style="margin:0 0 12px; min-height:44px; font-size:17px; font-weight:400; line-height:1.3; color:#c4c4c4;">Više rezervacija preko sajta</p>
-            <p ref="{{ refKutak }}" style="margin:0; font-size:clamp(34px,4vw,48px); font-weight:400; line-height:1; letter-spacing:-0.03em; color:#ffffff; font-variant-numeric:tabular-nums;">{{ brojKutak }}</p>
+            <p data-m="oznaka" style="margin:0 0 12px; min-height:44px; font-size:16px; font-weight:400; line-height:1.3; color:#c4c4c4;">Više rezervacija preko sajta</p>
+            <p ref="{{ refKutak }}" style="margin:0; font-size:round(clamp(36px,4vw,48px), 4px); font-weight:400; line-height:1; letter-spacing:-0.03em; color:#ffffff; font-variant-numeric:tabular-nums;">{{ brojKutak }}</p>
           </div>
           </div>
         </div>
       </article>
 
-      <article style="position:relative; overflow:hidden; border-radius:32px; background:linear-gradient(180deg, #14161f 0%, #0c0d12 62%, #0a0a0a 100%); padding:clamp(24px,3vw,48px);">
+      <article data-reveal="true" style="position:relative; overflow:hidden; border-radius:32px; background:linear-gradient(180deg, #14161f 0%, #0c0d12 62%, #0a0a0a 100%); padding:clamp(24px,3vw,48px);">
         <img src="./alvadent-mockup.png" alt="Alvadent — sajt stomatološke ordinacije" style="display:block; width:100%; height:auto; border-radius:14px; box-shadow:0 22px 54px rgba(0,0,0,.45);">
         <div style="display:flex; flex-wrap:wrap; gap:clamp(24px,3vw,44px); align-items:flex-start; padding-top:clamp(28px,3.4vw,44px);">
           <div style="flex:1 1 300px; min-width:0;">
-            <h3 style="margin:0 0 12px; font-size:clamp(24px,2.8vw,34px); font-weight:400; line-height:1.15; letter-spacing:-0.02em; color:#ffffff;">Sajt za stomatološku ordinaciju</h3>
+            <h3 style="margin:0 0 12px; font-size:round(clamp(24px,2.8vw,36px), 4px); font-weight:400; line-height:1.15; letter-spacing:-0.02em; color:#ffffff;">Sajt za stomatološku ordinaciju</h3>
             <p style="margin:0; font-size:16px; line-height:1.6; color:#c9c9cd; max-width:46ch; text-wrap:pretty;">Pacijenti su zvali da pitaju istih pet stvari. Sada telefon zvoni radi zakazivanja, a ne radi radnog vremena i cena.</p>
           </div>
-          <div style="flex:1 1 260px; min-width:0; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap:clamp(18px,2vw,28px);">
+          <div data-m="brojevi" style="flex:1 1 260px; min-width:0; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap:clamp(18px,2vw,28px);">
             <div style="min-width:0;">
-            <p style="margin:0 0 12px; min-height:44px; font-size:17px; font-weight:400; line-height:1.3; color:#c4c4c4;">Najčešćih pitanja na jednoj strani</p>
-            <p style="margin:0; font-size:clamp(34px,4vw,48px); font-weight:400; line-height:1; letter-spacing:-0.03em; color:#ffffff;">5</p>
+            <p data-m="oznaka" style="margin:0 0 12px; min-height:44px; font-size:16px; font-weight:400; line-height:1.3; color:#c4c4c4;">Najčešćih pitanja na jednoj strani</p>
+            <p style="margin:0; font-size:round(clamp(36px,4vw,48px), 4px); font-weight:400; line-height:1; letter-spacing:-0.03em; color:#ffffff;">5</p>
           </div>
             <div style="min-width:0;">
-            <p style="margin:0 0 12px; min-height:44px; font-size:17px; font-weight:400; line-height:1.3; color:#c4c4c4;">Manje poziva oko osnovnih pitanja</p>
-            <p ref="{{ refAlva }}" style="margin:0; font-size:clamp(34px,4vw,48px); font-weight:400; line-height:1; letter-spacing:-0.03em; color:#ffffff; font-variant-numeric:tabular-nums;">{{ brojAlva }}</p>
+            <p data-m="oznaka" style="margin:0 0 12px; min-height:44px; font-size:16px; font-weight:400; line-height:1.3; color:#c4c4c4;">Manje poziva oko osnovnih pitanja</p>
+            <p ref="{{ refAlva }}" style="margin:0; font-size:round(clamp(36px,4vw,48px), 4px); font-weight:400; line-height:1; letter-spacing:-0.03em; color:#ffffff; font-variant-numeric:tabular-nums;">{{ brojAlva }}</p>
           </div>
           </div>
         </div>
@@ -142,23 +266,28 @@
 
   <sc-if value="{{ prikaziPreporuke }}" hint-placeholder-val="{{ true }}">
     <section id="preporuke" style="position:relative; padding:clamp(36px,4vw,60px) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(64px,6.5vw,104px);">
-      <h2 style="position:relative; margin:0 0 clamp(32px,4vw,56px); text-align:center; font-size:clamp(28px,3.6vw,44px); font-weight:400; line-height:1.1; letter-spacing:-0.02em; color:#f8f8f8;">Preporuke</h2>
-      <div style="position:relative; max-width:1040px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(270px, 1fr)); gap:clamp(20px,2.2vw,28px); align-items:start;">
-        <div style="border:1px solid rgba(255,255,255,.1); border-radius:30px; padding:clamp(24px,2.6vw,34px); background:linear-gradient(158deg, rgba(118,74,190,.26) 0%, rgba(118,74,190,.06) 46%, rgba(255,255,255,.02) 100%); box-shadow:0 24px 60px rgba(0,0,0,.4); transform:translateY(clamp(0px,3vw,44px)); transition:transform 320ms cubic-bezier(.2,.7,.3,1), border-color 320ms ease-out;" style-hover="border-color:rgba(255,255,255,.22);">
-          <p style="margin:0; font-size:17px; font-weight:600; line-height:1.35; color:#ffffff;">Miloš, KUTAK bistro &amp; bar</p>
-          <p style="margin:2px 0 22px; font-size:15px; font-weight:500; line-height:1.35; color:#c2c2c9;">Vlasnik · Zrenjanin</p>
+      <h2 data-reveal="true" style="position:relative; margin:0 0 clamp(32px,4vw,56px); text-align:center; font-size:round(clamp(28px,3.6vw,44px), 4px); font-weight:400; line-height:1.1; letter-spacing:-0.02em; color:#f8f8f8;">Preporuke</h2>
+      <div data-m="preporuke" style="position:relative; max-width:1040px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(270px, 1fr)); gap:clamp(20px,2.2vw,28px); align-items:start;">
+        <div data-reveal="true" style="border:1px solid rgba(255,255,255,.1); border-radius:30px; padding:clamp(24px,2.6vw,34px); background:linear-gradient(158deg, rgba(118,74,190,.26) 0%, rgba(118,74,190,.06) 46%, rgba(255,255,255,.02) 100%); box-shadow:0 24px 60px rgba(0,0,0,.4); transform:translateY(clamp(0px,3vw,44px)); transition:transform 320ms cubic-bezier(.2,.7,.3,1), border-color 320ms ease-out;" style-hover="border-color:rgba(255,255,255,.22);">
+          <p style="margin:0; font-size:16px; font-weight:600; line-height:1.35; color:#ffffff;">Miloš, KUTAK bistro &amp; bar</p>
+          <p style="margin:2px 0 22px; font-size:16px; font-weight:500; line-height:1.35; color:#c2c2c9;">Vlasnik · Zrenjanin</p>
           <p style="margin:0; font-size:16px; line-height:1.7; color:#cdcdd3; text-wrap:pretty;">Pre sajta je pola smene prolazilo na telefonu. Rezervacije su se pamtile u glavi, pa se uvek neki detalj izgubi: broj osoba, vreme, ime. Sada svaka rezervacija dođe zapisana na mejl, sa datumom i brojem gostiju, i konobar je vidi pre nego što gost uđe. Trifke je uz sajt napravio i meni koji sami menjamo kad promenimo cene, bez čekanja i bez naplate po izmeni. Radilo se brzo, pitanja su bila konkretna, i posle mesec dana nije bilo ni jedne stvari koju smo morali da vraćamo.</p>
         </div>
-        <div style="border:1px solid rgba(255,255,255,.11); border-radius:30px; padding:clamp(26px,2.8vw,38px); background:linear-gradient(158deg, rgba(255,255,255,.075) 0%, rgba(255,255,255,.03) 48%, rgba(255,255,255,.012) 100%); box-shadow:0 28px 70px rgba(0,0,0,.45); transition:transform 320ms cubic-bezier(.2,.7,.3,1), border-color 320ms ease-out;" style-hover="border-color:rgba(255,255,255,.24);">
-          <p style="margin:0; font-size:17px; font-weight:600; line-height:1.35; color:#ffffff;">dr Aleksandra, Alvadent</p>
-          <p style="margin:2px 0 22px; font-size:15px; font-weight:500; line-height:1.35; color:#c2c2c9;">Stomatološka ordinacija</p>
+        <div data-reveal="true" style="border:1px solid rgba(255,255,255,.11); border-radius:30px; padding:clamp(26px,2.8vw,38px); background:linear-gradient(158deg, rgba(255,255,255,.075) 0%, rgba(255,255,255,.03) 48%, rgba(255,255,255,.012) 100%); box-shadow:0 28px 70px rgba(0,0,0,.45); transition:transform 320ms cubic-bezier(.2,.7,.3,1), border-color 320ms ease-out;" style-hover="border-color:rgba(255,255,255,.24);">
+          <p style="margin:0; font-size:16px; font-weight:600; line-height:1.35; color:#ffffff;">dr Aleksandra, Alvadent</p>
+          <p style="margin:2px 0 22px; font-size:16px; font-weight:500; line-height:1.35; color:#c2c2c9;">Stomatološka ordinacija</p>
           <p style="margin:0; font-size:16px; line-height:1.7; color:#cdcdd3; text-wrap:pretty;">Najviše nam je pomoglo to što su pacijenti prestali da zovu zbog osnovnih stvari: radno vreme, adresa, da li radimo subotom, koliko traje pregled. Sve to sada pročitaju na sajtu, pa telefon koristimo za ono zbog čega i postoji: zakazivanje. Sestra je prvi put imala miran dan na recepciji. Sajt se otvara brzo i na telefonu, a stranice sa uslugama pišemo svojim rečima, ne kao katalog. Trifke je slušao kako ordinacija zaista funkcioniše pre nego što je počeo da dizajnira, i to se vidi.</p>
         </div>
-        <div style="border:1px solid rgba(255,255,255,.1); border-radius:30px; padding:clamp(24px,2.6vw,34px); background:linear-gradient(158deg, rgba(40,120,140,.24) 0%, rgba(40,120,140,.06) 46%, rgba(255,255,255,.02) 100%); box-shadow:0 24px 60px rgba(0,0,0,.4); transform:translateY(clamp(0px,4.5vw,72px)); transition:transform 320ms cubic-bezier(.2,.7,.3,1), border-color 320ms ease-out;" style-hover="border-color:rgba(255,255,255,.22);">
-          <p style="margin:0; font-size:17px; font-weight:600; line-height:1.35; color:#ffffff;">Simke, Tattoo Simke</p>
-          <p style="margin:2px 0 22px; font-size:15px; font-weight:500; line-height:1.35; color:#c2c2c9;">Tatoo umetnik · studio</p>
+        <div data-reveal="true" style="border:1px solid rgba(255,255,255,.1); border-radius:30px; padding:clamp(24px,2.6vw,34px); background:linear-gradient(158deg, rgba(40,120,140,.24) 0%, rgba(40,120,140,.06) 46%, rgba(255,255,255,.02) 100%); box-shadow:0 24px 60px rgba(0,0,0,.4); transform:translateY(clamp(0px,4.5vw,72px)); transition:transform 320ms cubic-bezier(.2,.7,.3,1), border-color 320ms ease-out;" style-hover="border-color:rgba(255,255,255,.22);">
+          <p style="margin:0; font-size:16px; font-weight:600; line-height:1.35; color:#ffffff;">Simke, Tattoo Simke</p>
+          <p style="margin:2px 0 22px; font-size:16px; font-weight:500; line-height:1.35; color:#c2c2c9;">Tatoo umetnik · studio</p>
           <p style="margin:0; font-size:16px; line-height:1.7; color:#cdcdd3; text-wrap:pretty;">Zakazivanje mi je pre jelo svako veče, poruke na tri mesta, termini u beležnici, pa se dvoje pojave u isto vreme. Sada otvorim aplikaciju i vidim ceo dan, a sistem ne pusti dva termina da se preklope. Ono što najviše cenim je što sam dobio alat napravljen za moj način rada, a ne nešto opšte u šta moram da se uklopim. Kad zatreba izmena, dobijem je isti dan i objašnjenje bez tehničkih reči.</p>
         </div>
+      </div>
+      <div data-m="tacke" aria-hidden="true" style="display:none; justify-content:center; gap:8px; margin:24px auto 0;">
+        <span style="display:block; width:20px; height:6px; border-radius:999px; background:rgba(255,255,255,.85); transition:width 300ms cubic-bezier(.2,.7,.3,1), background 300ms ease-out;"></span>
+        <span style="display:block; width:6px; height:6px; border-radius:999px; background:rgba(255,255,255,.26); transition:width 300ms cubic-bezier(.2,.7,.3,1), background 300ms ease-out;"></span>
+        <span style="display:block; width:6px; height:6px; border-radius:999px; background:rgba(255,255,255,.26); transition:width 300ms cubic-bezier(.2,.7,.3,1), background 300ms ease-out;"></span>
       </div>
     </section>
   </sc-if>
@@ -168,30 +297,30 @@
 
     <section style="position:relative; padding:clamp(112px,10vw,140px) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(24px,3vw,40px);">
       <div style="max-width:70ch; display:flex; flex-direction:column; gap:clamp(20px,2.4vw,30px);">
-        <h1 style="margin:0; font-size:clamp(32px,4.6vw,58px); font-weight:400; line-height:1.16; letter-spacing:-0.022em; color:#ffffff; text-wrap:balance;">Alati koje pravim.</h1>
-        <p style="margin:0; font-size:clamp(18px,1.6vw,22px); line-height:1.6; color:#dcdce0; text-wrap:pretty;">Sajt je jedna stvar, ali kod većine malih poslova problem nije izgled, nego posao koji se svaki dan radi ručno. Zakazivanje kroz poruke, tabela koju neko prepisuje uveče, mejl koji se piše po deseti put. Takve&nbsp;stvari&nbsp;pravim kao male alate, po meri.</p>
+        <h1 data-reveal="true" style="margin:0; font-size:round(clamp(32px,4.6vw,60px), 4px); font-weight:400; line-height:1.16; letter-spacing:-0.022em; color:#ffffff; text-wrap:balance;">Alati koje pravim.</h1>
+        <p style="margin:0; font-size:round(clamp(20px,1.6vw,24px), 4px); line-height:1.6; color:#dcdce0; text-wrap:pretty;">Sajt je jedna stvar, ali kod većine malih poslova problem nije izgled, nego posao koji se svaki dan radi ručno. Zakazivanje kroz poruke, tabela koju neko prepisuje uveče, mejl koji se piše po deseti put. Takve&nbsp;stvari&nbsp;pravim kao male alate, po meri.</p>
       </div>
     </section>
 
     <section style="position:relative; padding:clamp(20px,2.4vw,32px) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(28px,3.4vw,48px);">
-      <article style="position:relative; overflow:hidden; border-radius:32px; background:linear-gradient(180deg, #111a18 0%, #0b0f0e 62%, #0a0a0a 100%); padding:clamp(24px,3vw,48px);">
-        <div style="display:grid; grid-template-columns:1.596fr 0.473fr; align-items:start; gap:clamp(16px,2vw,32px); width:100%;">
+      <article data-reveal="true" style="position:relative; overflow:hidden; border-radius:32px; background:linear-gradient(180deg, #111a18 0%, #0b0f0e 62%, #0a0a0a 100%); padding:clamp(24px,3vw,48px);">
+        <div data-m="simke" style="display:grid; grid-template-columns:1.596fr 0.473fr; align-items:start; gap:clamp(16px,2vw,32px); width:100%;">
           <img src="./simke-desktop.png" alt="Tattoo Simke — desktop prikaz aplikacije" style="display:block; width:100%; height:auto;">
           <img src="./simke-mockup.png" alt="Tattoo Simke — mobilni prikaz aplikacije" style="display:block; width:100%; height:auto;">
         </div>
         <div style="display:flex; flex-wrap:wrap; gap:clamp(24px,3vw,44px); align-items:flex-start; padding-top:clamp(28px,3.4vw,44px);">
           <div style="flex:1 1 300px; min-width:0;">
-            <h2 style="margin:0 0 12px; font-size:clamp(24px,2.8vw,34px); font-weight:400; line-height:1.15; letter-spacing:-0.02em; color:#ffffff;">Aplikacija za zakazivanje u tatoo studiju</h2>
+            <h2 data-reveal="true" style="margin:0 0 12px; font-size:round(clamp(24px,2.8vw,36px), 4px); font-weight:400; line-height:1.15; letter-spacing:-0.02em; color:#ffffff;">Aplikacija za zakazivanje u tatoo studiju</h2>
             <p style="margin:0; font-size:16px; line-height:1.6; color:#c9c9cd; max-width:46ch; text-wrap:pretty;">Termini su se dogovarali kroz poruke, pa je jedno zakazivanje trajalo desetak poruka i povremeno se dva termina preklope. Sada zahtev dolazi sa svim podacima, a ceo dan se vidi na jednom ekranu.</p>
           </div>
-          <div style="flex:1 1 260px; min-width:0; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap:clamp(18px,2vw,28px);">
+          <div data-m="brojevi" style="flex:1 1 260px; min-width:0; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap:clamp(18px,2vw,28px);">
             <div style="min-width:0;">
-            <p style="margin:0 0 12px; min-height:44px; font-size:17px; font-weight:400; line-height:1.3; color:#c4c4c4;">Poruka po zakazivanju</p>
-            <p style="margin:0; font-size:clamp(34px,4vw,48px); font-weight:400; line-height:1; letter-spacing:-0.03em; color:#ffffff;">10 → 1</p>
+            <p data-m="oznaka" style="margin:0 0 12px; min-height:44px; font-size:16px; font-weight:400; line-height:1.3; color:#c4c4c4;">Poruka po zakazivanju</p>
+            <p style="margin:0; font-size:round(clamp(36px,4vw,48px), 4px); font-weight:400; line-height:1; letter-spacing:-0.03em; color:#ffffff;">10 → 1</p>
           </div>
             <div style="min-width:0;">
-            <p style="margin:0 0 12px; min-height:44px; font-size:17px; font-weight:400; line-height:1.3; color:#c4c4c4;">Preklopljenih termina</p>
-            <p style="margin:0; font-size:clamp(34px,4vw,48px); font-weight:400; line-height:1; letter-spacing:-0.03em; color:#ffffff;">0</p>
+            <p data-m="oznaka" style="margin:0 0 12px; min-height:44px; font-size:16px; font-weight:400; line-height:1.3; color:#c4c4c4;">Preklopljenih termina</p>
+            <p style="margin:0; font-size:round(clamp(36px,4vw,48px), 4px); font-weight:400; line-height:1; letter-spacing:-0.03em; color:#ffffff;">0</p>
           </div>
           </div>
         </div>
@@ -203,58 +332,58 @@
   <sc-if value="{{ jeOMeni }}" hint-placeholder-val="{{ false }}">
 
     <section style="position:relative; padding:clamp(112px,10vw,140px) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(24px,3vw,40px);">
-      <div style="display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.6fr); gap:clamp(16px,2.4vw,40px);">
+      <div data-m="usluge" style="display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.6fr); gap:clamp(16px,2.4vw,40px);">
         <div>
-          <p style="margin:0 0 10px; font-size:clamp(12px,1.6vw,16px); line-height:1.3; color:#cdcdd3;">Kodiram od</p>
-          <p style="margin:0; font-size:clamp(15px,3.5vw,58px); font-weight:400; line-height:1.04; letter-spacing:-0.03em; color:#ffffff; white-space:nowrap;">2024</p>
+          <p style="margin:0 0 10px; font-size:round(clamp(12px,1.6vw,16px), 4px); line-height:1.3; color:#cdcdd3;">Kodiram od</p>
+          <p style="margin:0; font-size:round(clamp(16px,3.5vw,60px), 4px); font-weight:400; line-height:1.04; letter-spacing:-0.03em; color:#ffffff;">2024</p>
         </div>
         <div>
-          <p style="margin:0 0 10px; font-size:clamp(12px,1.6vw,16px); line-height:1.3; color:#cdcdd3;">Predatih projekata</p>
-          <p style="margin:0; font-size:clamp(15px,3.5vw,58px); font-weight:400; line-height:1.04; letter-spacing:-0.03em; color:#ffffff; white-space:nowrap;">30+</p>
+          <p style="margin:0 0 10px; font-size:round(clamp(12px,1.6vw,16px), 4px); line-height:1.3; color:#cdcdd3;">Predatih projekata</p>
+          <p style="margin:0; font-size:round(clamp(16px,3.5vw,60px), 4px); font-weight:400; line-height:1.04; letter-spacing:-0.03em; color:#ffffff;">30+</p>
         </div>
         <div>
-          <p style="margin:0 0 10px; font-size:clamp(12px,1.6vw,16px); line-height:1.3; color:#cdcdd3;">Edukacija</p>
-          <p style="margin:0; font-size:clamp(15px,3.5vw,58px); font-weight:400; line-height:1.04; letter-spacing:-0.03em; color:#ffffff; white-space:nowrap;">Nauči dizajn</p>
+          <p style="margin:0 0 10px; font-size:round(clamp(12px,1.6vw,16px), 4px); line-height:1.3; color:#cdcdd3;">Edukacija</p>
+          <p style="margin:0; font-size:round(clamp(16px,3.5vw,60px), 4px); font-weight:400; line-height:1.04; letter-spacing:-0.03em; color:#ffffff;">Nauči dizajn</p>
         </div>
       </div>
     </section>
 
     <section style="position:relative; padding:clamp(28px,3.4vw,48px) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(24px,3vw,40px);">
       <div style="max-width:74ch; display:flex; flex-direction:column; gap:clamp(20px,2.4vw,32px);">
-        <p style="margin:0; font-size:clamp(18px,1.6vw,22px); line-height:1.6; color:#dcdce0; text-wrap:pretty;">Počelo je tako što sam hteo da napravim sajt za sebe. Otvorio sam prazan fajl, ukucao prvi naslov i to me je zadržalo. Od tada uglavnom pravim sajtove.</p>
-        <p style="margin:0; font-size:clamp(18px,1.6vw,22px); line-height:1.6; color:#dcdce0; text-wrap:pretty;">Dizajn i izradu sajtova učio sam kroz edukaciju Nauči dizajn, a dalje kroz svoje projekte i rad sa klijentima. Prvi sajt koji je nekome zaista rešavao problem napravio sam 2025. za bistro iz Zrenjanina, gde su rezervacije do tada stizale samo telefonom, tokom smene. Tada mi je postalo jasno da dobar sajt nije samo lep dizajn, već alat koji vlasniku skida problem sa vrata.</p>
-        <p style="margin:0; font-size:clamp(18px,1.6vw,22px); line-height:1.6; color:#dcdce0; text-wrap:pretty;">Radim samostalno i javljam se lično. Nemam deset godina iskustva i ne pravim se da imam, ali iza sebe imam projekte koje sam radio za sebe, kroz vežbu i za klijente. Zato mogu da se posvetim i manjim biznisima kojima velike agencije često nisu najbolja opcija.</p>
-        <p style="margin:0; font-size:clamp(18px,1.6vw,22px); line-height:1.6; color:#dcdce0; text-wrap:pretty;">Radim sa HTML-om, CSS-om i JavaScriptom i trudim se da sve bude jednostavno, brzo i lako za održavanje. Prvi razgovor i procena su besplatni, cenu dogovaramo unapred, a 30 dana nakon predaje izmene radim bez dodatne naplate.</p>
+        <p style="margin:0; font-size:round(clamp(20px,1.6vw,24px), 4px); line-height:1.6; color:#dcdce0; text-wrap:pretty;">Počelo je tako što sam hteo da napravim sajt za sebe. Otvorio sam prazan fajl, ukucao prvi naslov i to me je zadržalo. Od tada uglavnom pravim sajtove.</p>
+        <p style="margin:0; font-size:round(clamp(20px,1.6vw,24px), 4px); line-height:1.6; color:#dcdce0; text-wrap:pretty;">Dizajn i izradu sajtova učio sam kroz edukaciju Nauči dizajn, a dalje kroz svoje projekte i rad sa klijentima. Prvi sajt koji je nekome zaista rešavao problem napravio sam 2025. za bistro iz Zrenjanina, gde su rezervacije do tada stizale samo telefonom, tokom smene. Tada mi je postalo jasno da dobar sajt nije samo lep dizajn, već alat koji vlasniku skida problem sa vrata.</p>
+        <p style="margin:0; font-size:round(clamp(20px,1.6vw,24px), 4px); line-height:1.6; color:#dcdce0; text-wrap:pretty;">Radim samostalno i javljam se lično. Nemam deset godina iskustva i ne pravim se da imam, ali iza sebe imam projekte koje sam radio za sebe, kroz vežbu i za klijente. Zato mogu da se posvetim i manjim biznisima kojima velike agencije često nisu najbolja opcija.</p>
+        <p style="margin:0; font-size:round(clamp(20px,1.6vw,24px), 4px); line-height:1.6; color:#dcdce0; text-wrap:pretty;">Radim sa HTML-om, CSS-om i JavaScriptom i trudim se da sve bude jednostavno, brzo i lako za održavanje. Prvi razgovor i procena su besplatni, cenu dogovaramo unapred, a 30 dana nakon predaje izmene radim bez dodatne naplate.</p>
       </div>
     </section>
 
     <section style="position:relative; padding:clamp(36px,4vw,60px) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(20px,2.4vw,32px);">
-      <h2 style="margin:0 0 clamp(32px,4vw,56px); font-size:clamp(28px,3.4vw,42px); font-weight:400; line-height:1.1; letter-spacing:-0.02em; color:#f8f8f8;">Izabrano iskustvo</h2>
+      <h2 data-reveal="true" style="margin:0 0 clamp(32px,4vw,56px); font-size:round(clamp(28px,3.4vw,44px), 4px); font-weight:400; line-height:1.1; letter-spacing:-0.02em; color:#f8f8f8;">Izabrano iskustvo</h2>
       <div style="display:flex; flex-direction:column;">
-        <div style="display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:baseline; padding:clamp(18px,2vw,26px) 0; border-bottom:1px solid rgba(255,255,255,.09);">
-          <p style="margin:0; font-size:clamp(20px,2.2vw,28px); font-weight:400; line-height:1.2; color:#f4f4f4;">Samostalna izrada sajtova</p>
-          <div style="text-align:right;">
+        <div data-m="red" style="display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:baseline; padding:clamp(18px,2vw,26px) 0; border-bottom:1px solid rgba(255,255,255,.09);">
+          <p style="margin:0; font-size:round(clamp(20px,2.2vw,28px), 4px); font-weight:400; line-height:1.2; color:#f4f4f4;">Samostalna izrada sajtova</p>
+          <div data-m="desno" style="text-align:right;">
             <p style="margin:0; font-size:16px; line-height:1.4; color:#c9c9cd;">Freelance, Zrenjanin</p>
             <p style="margin:0; font-size:16px; line-height:1.4; color:#a6a6ac;">2024 — danas</p>
           </div>
         </div>
-        <div style="display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:baseline; padding:clamp(18px,2vw,26px) 0; border-bottom:1px solid rgba(255,255,255,.09);">
-          <p style="margin:0; font-size:clamp(20px,2.2vw,28px); font-weight:400; line-height:1.2; color:#f4f4f4;">Aplikacija za zakazivanje</p>
-          <div style="text-align:right;">
+        <div data-m="red" style="display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:baseline; padding:clamp(18px,2vw,26px) 0; border-bottom:1px solid rgba(255,255,255,.09);">
+          <p style="margin:0; font-size:round(clamp(20px,2.2vw,28px), 4px); font-weight:400; line-height:1.2; color:#f4f4f4;">Aplikacija za zakazivanje</p>
+          <div data-m="desno" style="text-align:right;">
             <p style="margin:0; font-size:16px; line-height:1.4; color:#c9c9cd;">Tattoo Simke</p>
             <p style="margin:0; font-size:16px; line-height:1.4; color:#a6a6ac;">2026</p>
           </div>
         </div>
-        <div style="display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:baseline; padding:clamp(18px,2vw,26px) 0; border-bottom:1px solid rgba(255,255,255,.09);">
-          <p style="margin:0; font-size:clamp(20px,2.2vw,28px); font-weight:400; line-height:1.2; color:#f4f4f4;">Sajt za stomatološku ordinaciju</p>
-          <div style="text-align:right;">
+        <div data-m="red" style="display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:baseline; padding:clamp(18px,2vw,26px) 0; border-bottom:1px solid rgba(255,255,255,.09);">
+          <p style="margin:0; font-size:round(clamp(20px,2.2vw,28px), 4px); font-weight:400; line-height:1.2; color:#f4f4f4;">Sajt za stomatološku ordinaciju</p>
+          <div data-m="desno" style="text-align:right;">
             <p style="margin:0; font-size:16px; line-height:1.4; color:#c9c9cd;">Alvadent</p>
             <p style="margin:0; font-size:16px; line-height:1.4; color:#a6a6ac;">2025</p>
           </div>
         </div>
-        <div style="display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:baseline; padding:clamp(18px,2vw,26px) 0; border-bottom:1px solid rgba(255,255,255,.09);">
-          <p style="margin:0; font-size:clamp(20px,2.2vw,28px); font-weight:400; line-height:1.2; color:#f4f4f4;">Sajt za bistro i bar</p>
-          <div style="text-align:right;">
+        <div data-m="red" style="display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:baseline; padding:clamp(18px,2vw,26px) 0; border-bottom:1px solid rgba(255,255,255,.09);">
+          <p style="margin:0; font-size:round(clamp(20px,2.2vw,28px), 4px); font-weight:400; line-height:1.2; color:#f4f4f4;">Sajt za bistro i bar</p>
+          <div data-m="desno" style="text-align:right;">
             <p style="margin:0; font-size:16px; line-height:1.4; color:#c9c9cd;">KUTAK bistro &amp; bar</p>
             <p style="margin:0; font-size:16px; line-height:1.4; color:#a6a6ac;">2025</p>
           </div>
@@ -263,7 +392,7 @@
     </section>
 
     <section style="position:relative; padding:clamp(36px,4vw,60px) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(20px,2.4vw,32px);">
-      <h2 style="margin:0 0 clamp(28px,3.4vw,44px); font-size:clamp(28px,3.4vw,42px); font-weight:400; line-height:1.1; letter-spacing:-0.02em; color:#f8f8f8;">Veštine</h2>
+      <h2 data-reveal="true" style="margin:0 0 clamp(28px,3.4vw,44px); font-size:round(clamp(28px,3.4vw,44px), 4px); font-weight:400; line-height:1.1; letter-spacing:-0.02em; color:#f8f8f8;">Veštine</h2>
       <div style="display:flex; flex-wrap:wrap; gap:12px;">
         <span style="border:1px solid rgba(255,255,255,.14); border-radius:10px; padding:12px 18px; font-size:16px; color:#d2d2d6;">HTML</span>
         <span style="border:1px solid rgba(255,255,255,.14); border-radius:10px; padding:12px 18px; font-size:16px; color:#d2d2d6;">CSS</span>
@@ -281,18 +410,18 @@
     </section>
 
     <section style="position:relative; padding:clamp(36px,4vw,60px) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(20px,2.4vw,32px);">
-      <h2 style="margin:0 0 clamp(32px,4vw,56px); font-size:clamp(28px,3.4vw,42px); font-weight:400; line-height:1.1; letter-spacing:-0.02em; color:#f8f8f8;">Učenje</h2>
+      <h2 data-reveal="true" style="margin:0 0 clamp(32px,4vw,56px); font-size:round(clamp(28px,3.4vw,44px), 4px); font-weight:400; line-height:1.1; letter-spacing:-0.02em; color:#f8f8f8;">Učenje</h2>
       <div style="display:flex; flex-direction:column;">
-        <div style="display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:baseline; padding:clamp(18px,2vw,26px) 0; border-bottom:1px solid rgba(255,255,255,.09);">
-          <p style="margin:0; font-size:clamp(19px,2vw,26px); font-weight:400; line-height:1.2; color:#f4f4f4;">Web dizajn i izrada sajtova</p>
+        <div data-m="red" style="display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:baseline; padding:clamp(18px,2vw,26px) 0; border-bottom:1px solid rgba(255,255,255,.09);">
+          <p style="margin:0; font-size:round(clamp(20px,2vw,28px), 4px); font-weight:400; line-height:1.2; color:#f4f4f4;">Web dizajn i izrada sajtova</p>
           <p style="margin:0; font-size:16px; line-height:1.4; color:#c9c9cd;">Nauči dizajn, online</p>
         </div>
-        <div style="display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:baseline; padding:clamp(18px,2vw,26px) 0; border-bottom:1px solid rgba(255,255,255,.09);">
-          <p style="margin:0; font-size:clamp(19px,2vw,26px); font-weight:400; line-height:1.2; color:#f4f4f4;">JavaScript kroz sopstvene projekte</p>
+        <div data-m="red" style="display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:baseline; padding:clamp(18px,2vw,26px) 0; border-bottom:1px solid rgba(255,255,255,.09);">
+          <p style="margin:0; font-size:round(clamp(20px,2vw,28px), 4px); font-weight:400; line-height:1.2; color:#f4f4f4;">JavaScript kroz sopstvene projekte</p>
           <p style="margin:0; font-size:16px; line-height:1.4; color:#c9c9cd;">samostalno, 2024 — danas</p>
         </div>
-        <div style="display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:baseline; padding:clamp(18px,2vw,26px) 0; border-bottom:1px solid rgba(255,255,255,.09);">
-          <p style="margin:0; font-size:clamp(19px,2vw,26px); font-weight:400; line-height:1.2; color:#f4f4f4;">Srednja škola</p>
+        <div data-m="red" style="display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between; align-items:baseline; padding:clamp(18px,2vw,26px) 0; border-bottom:1px solid rgba(255,255,255,.09);">
+          <p style="margin:0; font-size:round(clamp(20px,2vw,28px), 4px); font-weight:400; line-height:1.2; color:#f4f4f4;">Srednja škola</p>
           <p style="margin:0; font-size:16px; line-height:1.4; color:#c9c9cd;">Zrenjanin</p>
         </div>
       </div>
@@ -303,7 +432,7 @@
   <section id="kontakt" style="position:relative; padding:clamp(32px,3.6vw,56px) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(48px,5vw,72px);">
     <div style="max-width:620px; margin:0 auto; display:flex; flex-direction:column; gap:clamp(22px,2.4vw,30px);">
       <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px;">
-        <h2 style="margin:0; font-size:clamp(26px,3.2vw,40px); font-weight:400; line-height:1.1; letter-spacing:-0.025em; color:#ffffff;">Pošaljite poruku</h2>
+        <h2 data-reveal="true" style="margin:0; font-size:round(clamp(28px,3.2vw,40px), 4px); font-weight:400; line-height:1.1; letter-spacing:-0.025em; color:#ffffff;">Pošaljite poruku</h2>
         <p style="margin:0; font-size:16px; line-height:1.65; color:#c9c9cd; max-width:48ch; text-wrap:pretty;">Napišite u dve rečenice šta vam treba — ostalo pitam ja. Odgovaram istog dana.</p>
       </div>
 
@@ -311,33 +440,33 @@
       <form onSubmit="{{ posalji }}" onInput="{{ ocisti }}" noValidate="{{ true }}" style="display:flex; flex-direction:column; gap:14px;">
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:14px;">
           <label style="display:flex; flex-direction:column; gap:7px;">
-            <span style="font-size:14px; font-weight:500; color:#cdcdd3;">Ime</span>
-            <input type="text" name="ime" required="required" placeholder="Vaše ime" style="width:100%; min-height:46px; padding:0 18px; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.075); color:#f4f4f4; font-family:inherit; font-size:16px; outline:none; box-shadow:inset 0 1px 0 rgba(255,255,255,.06); transition:border-color 220ms ease-out, background 220ms ease-out;" style-focus="border-color:rgba(255,255,255,.5); background:rgba(255,255,255,.11);">
+            <span style="font-size:16px; font-weight:500; color:#cdcdd3;">Ime</span>
+            <input type="text" name="ime" required="required" placeholder="Vaše ime" style="width:100%; min-height:48px; padding:0 18px; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.075); color:#f4f4f4; font-family:inherit; font-size:16px; outline:none; box-shadow:inset 0 1px 0 rgba(255,255,255,.06); transition:border-color 220ms ease-out, background 220ms ease-out;" style-focus="border-color:rgba(255,255,255,.5); background:rgba(255,255,255,.11);">
             <sc-if value="{{ greskaIme }}" hint-placeholder-val="{{ false }}">
-              <span style="font-size:13px; line-height:1.4; color:#e58f8f;">{{ greskaIme }}</span>
+              <span style="font-size:12px; line-height:1.4; color:#e58f8f;">{{ greskaIme }}</span>
             </sc-if>
           </label>
           <label style="display:flex; flex-direction:column; gap:7px;">
-            <span style="font-size:14px; font-weight:500; color:#cdcdd3;">Email</span>
-            <input type="email" name="email" required="required" placeholder="ime@domen.rs" style="width:100%; min-height:46px; padding:0 18px; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.075); color:#f4f4f4; font-family:inherit; font-size:16px; outline:none; box-shadow:inset 0 1px 0 rgba(255,255,255,.06); transition:border-color 220ms ease-out, background 220ms ease-out;" style-focus="border-color:rgba(255,255,255,.5); background:rgba(255,255,255,.11);">
+            <span style="font-size:16px; font-weight:500; color:#cdcdd3;">Email</span>
+            <input type="email" name="email" required="required" placeholder="ime@domen.rs" style="width:100%; min-height:48px; padding:0 18px; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.075); color:#f4f4f4; font-family:inherit; font-size:16px; outline:none; box-shadow:inset 0 1px 0 rgba(255,255,255,.06); transition:border-color 220ms ease-out, background 220ms ease-out;" style-focus="border-color:rgba(255,255,255,.5); background:rgba(255,255,255,.11);">
             <sc-if value="{{ greskaEmail }}" hint-placeholder-val="{{ false }}">
-              <span style="font-size:13px; line-height:1.4; color:#e58f8f;">{{ greskaEmail }}</span>
+              <span style="font-size:12px; line-height:1.4; color:#e58f8f;">{{ greskaEmail }}</span>
             </sc-if>
           </label>
         </div>
 
         <div style="display:flex; flex-direction:column; gap:7px;">
-          <span style="font-size:14px; font-weight:500; color:#cdcdd3;">Tip posla</span>
+          <span style="font-size:16px; font-weight:500; color:#cdcdd3;">Tip posla</span>
           <div ref="{{ dropdownRef }}" style="position:relative;">
             <input type="hidden" name="tip" value="{{ tipVrednost }}">
-            <button type="button" onClick="{{ preklopi }}" style="width:100%; min-height:46px; padding:0 18px; display:flex; align-items:center; justify-content:space-between; gap:12px; text-align:left; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.075); color:#f4f4f4; font-family:inherit; font-size:16px; cursor:pointer; box-shadow:inset 0 1px 0 rgba(255,255,255,.06); transition:border-color 220ms ease-out, background 220ms ease-out;" style-hover="border-color:rgba(255,255,255,.36); background:rgba(255,255,255,.1);">
+            <button type="button" onClick="{{ preklopi }}" style="width:100%; min-height:48px; padding:0 18px; display:flex; align-items:center; justify-content:space-between; gap:12px; text-align:left; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.075); color:#f4f4f4; font-family:inherit; font-size:16px; cursor:pointer; box-shadow:inset 0 1px 0 rgba(255,255,255,.06); transition:border-color 220ms ease-out, background 220ms ease-out;" style-hover="border-color:rgba(255,255,255,.36); background:rgba(255,255,255,.1);">
               <span style="color:{{ tipBoja }};">{{ tipLabela }}</span>
               <span aria-hidden="true" style="flex:none; width:8px; height:8px; border-right:1.5px solid #b4b4bb; border-bottom:1.5px solid #b4b4bb; transform:{{ strelica }};"></span>
             </button>
             <sc-if value="{{ otvoren }}" hint-placeholder-val="{{ false }}">
               <div style="position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:20; overflow:hidden; padding:4px; border-radius:18px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.075); backdrop-filter:blur(22px); box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 18px 44px rgba(0,0,0,.45); display:flex; flex-direction:column; animation:omPadaj 180ms cubic-bezier(.2,.7,.3,1) both;">
                 <sc-for list="{{ opcije }}" as="opcija" hint-placeholder-count="4">
-                  <button type="button" onClick="{{ opcija.izaberi }}" style="width:100%; padding:10px 14px; display:flex; align-items:center; justify-content:space-between; gap:12px; text-align:left; border:none; border-radius:14px; background:transparent; color:#dcdce2; font-family:inherit; font-size:15px; line-height:1.3; cursor:pointer; transition:background 150ms ease-out, color 150ms ease-out;" style-hover="background:rgba(255,255,255,.1); color:#ffffff;">
+                  <button type="button" onClick="{{ opcija.izaberi }}" style="width:100%; padding:10px 14px; display:flex; align-items:center; justify-content:space-between; gap:12px; text-align:left; border:none; border-radius:14px; background:transparent; color:#dcdce2; font-family:inherit; font-size:16px; line-height:1.3; cursor:pointer; transition:background 150ms ease-out, color 150ms ease-out;" style-hover="background:rgba(255,255,255,.1); color:#ffffff;">
                     <span>{{ opcija.labela }}</span>
                     <span aria-hidden="true" style="flex:none; width:5px; height:5px; border-radius:50%; background:#ffffff; opacity:{{ opcija.aktivna }};"></span>
                   </button>
@@ -346,21 +475,21 @@
             </sc-if>
           </div>
           <sc-if value="{{ greskaTip }}" hint-placeholder-val="{{ false }}">
-            <span style="font-size:13px; line-height:1.4; color:#e58f8f;">{{ greskaTip }}</span>
+            <span style="font-size:12px; line-height:1.4; color:#e58f8f;">{{ greskaTip }}</span>
           </sc-if>
         </div>
 
         <label style="display:flex; flex-direction:column; gap:7px;">
-          <span style="font-size:14px; font-weight:500; color:#cdcdd3;">Poruka</span>
+          <span style="font-size:16px; font-weight:500; color:#cdcdd3;">Poruka</span>
           <textarea name="poruka" rows="4" required="required" placeholder="Opiši šta ti je potrebno." style="width:100%; padding:13px 18px; border-radius:20px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.075); color:#f4f4f4; font-family:inherit; font-size:16px; line-height:1.6; resize:vertical; outline:none; box-shadow:inset 0 1px 0 rgba(255,255,255,.06); transition:border-color 220ms ease-out, background 220ms ease-out;" style-focus="border-color:rgba(255,255,255,.5); background:rgba(255,255,255,.11);"></textarea>
           <sc-if value="{{ greskaPoruka }}" hint-placeholder-val="{{ false }}">
-            <span style="font-size:13px; line-height:1.4; color:#e58f8f;">{{ greskaPoruka }}</span>
+            <span style="font-size:12px; line-height:1.4; color:#e58f8f;">{{ greskaPoruka }}</span>
           </sc-if>
         </label>
 
         <button type="submit" style="width:100%; min-height:48px; border:none; border-radius:999px; background:#ffffff; color:#0a0a0a; font-family:inherit; font-size:16px; font-weight:500; cursor:pointer; transition:opacity 200ms ease-out;" style-hover="opacity:.86;">Pošalji poruku</button>
 
-        <p style="margin:6px 0 0; text-align:center; font-size:14px; line-height:1.6; color:#a6a6ac;">Ili direktno na <a href="mailto:{{ email }}" style="color:#ececf0; border-bottom:1px solid rgba(255,255,255,.24);">{{ email }}</a></p>
+        <p style="margin:6px 0 0; text-align:center; font-size:16px; line-height:1.6; color:#a6a6ac;">Ili direktno na <a href="mailto:{{ email }}" style="color:#ececf0; border-bottom:1px solid rgba(255,255,255,.24);">{{ email }}</a></p>
       </form>
 
       <a href="{{ instagram }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram" style="align-self:center; display:flex; align-items:center; justify-content:center; width:50px; height:50px; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.075); box-shadow:inset 0 1px 0 rgba(255,255,255,.06); color:#f4f4f4; transition:border-color 220ms ease-out, background 220ms ease-out;" style-hover="border-color:rgba(255,255,255,.36); background:rgba(255,255,255,.1); color:#ffffff;">
@@ -376,7 +505,7 @@
   </sc-if>
 
   <footer style="position:relative; padding:32px max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) 48px;">
-    <div style="max-width:1040px; margin:0 auto; display:flex; flex-wrap:wrap; gap:24px; justify-content:center; font-size:14px; color:#b2b2b2;">
+    <div style="max-width:1040px; margin:0 auto; display:flex; flex-wrap:wrap; gap:24px; justify-content:center; font-size:16px; color:#b2b2b2;">
       <p style="margin:0;">Sva prava zadržana</p>
       <p style="margin:0;">© Trifke 2026</p>
     </div>
@@ -392,7 +521,12 @@ class Component extends DCLogic {
     return "home";
   }
 
-  state = { strana: Component.strana(typeof location !== "undefined" ? location.hash : ""), cilj: null, tip: "", otvoren: false };
+  state = { strana: Component.strana(typeof location !== "undefined" ? location.hash : ""), cilj: null, tip: "", otvoren: false, meni: false };
+
+  _telo(zakljucaj) {
+    if (typeof document === "undefined") return;
+    document.body.style.overflow = zakljucaj ? "hidden" : "";
+  }
 
   // Drži scroll na cilju dok se visina dokumenta još menja (slike, fontovi).
   _nameri(hash) {
@@ -439,9 +573,15 @@ class Component extends DCLogic {
     }
   }
 
+  componentDidUpdate() {
+    this._osveziReveal();
+    this._vezKarusel();
+  }
+
   componentDidMount() {
     this._onHash = () => {
       const hash = location.hash;
+      if (this.state.meni) { this._telo(false); this.setState({ meni: false }); }
       const strana = Component.strana(hash);
       const cilj = strana === "home" ? hash : null;
       if (strana !== this.state.strana) {
@@ -454,6 +594,8 @@ class Component extends DCLogic {
       if (this.state.otvoren && this._dd && !this._dd.contains(e.target)) this.setState({ otvoren: false });
     };
     document.addEventListener("pointerdown", this._vanDropdowna);
+    this._esc = (e) => { if (e.key === "Escape" && this.state.meni) { this._telo(false); this.setState({ meni: false }); } };
+    document.addEventListener("keydown", this._esc);
     window.addEventListener("hashchange", this._onHash);
     // Klik na isti hash ne pokreće hashchange — pokrivamo i to.
     this._onClick = (e) => {
@@ -467,12 +609,52 @@ class Component extends DCLogic {
     window.addEventListener("wheel", this._prekid, { passive: true });
     window.addEventListener("touchstart", this._prekid, { passive: true });
     if (location.hash && Component.strana(location.hash) === "home") this._nameri(location.hash);
+    if (window.matchMedia && window.matchMedia("(max-width: 760px)").matches) {
+      this._ioReveal = new IntersectionObserver((zapisi) => {
+        zapisi.forEach(z => z.target.classList.toggle("om-vis", z.isIntersecting));
+      }, { threshold: 0.15, rootMargin: "0px 0px -6% 0px" });
+      this._osveziReveal();
+    }
+    this._vezKarusel();
+  }
+
+  _vezKarusel() {
+    const traka = document.querySelector('[data-m="preporuke"]');
+    const tacke = document.querySelector('[data-m="tacke"]');
+    if (!traka || !tacke || traka === this._traka) return;
+    if (this._traka && this._onTraka) this._traka.removeEventListener("scroll", this._onTraka);
+    this._traka = traka;
+    const osvezi = () => {
+      const k = traka.children[0];
+      if (!k) return;
+      const korak = k.getBoundingClientRect().width + 14;
+      const i = Math.max(0, Math.min(tacke.children.length - 1, Math.round(traka.scrollLeft / korak)));
+      Array.from(tacke.children).forEach((t, j) => {
+        t.style.width = j === i ? "20px" : "6px";
+        t.style.background = j === i ? "rgba(255,255,255,.85)" : "rgba(255,255,255,.26)";
+      });
+    };
+    this._onTraka = () => {
+      if (this._rafTraka) cancelAnimationFrame(this._rafTraka);
+      this._rafTraka = requestAnimationFrame(osvezi);
+    };
+    traka.addEventListener("scroll", this._onTraka, { passive: true });
+    osvezi();
+  }
+
+  _osveziReveal() {
+    if (!this._ioReveal) return;
+    document.querySelectorAll('[data-reveal], [data-m="red"]').forEach(el => this._ioReveal.observe(el));
   }
 
   componentWillUnmount() {
+    this._telo(false);
     this._otkazi();
+    if (this._ioReveal) this._ioReveal.disconnect();
+    if (this._traka && this._onTraka) this._traka.removeEventListener("scroll", this._onTraka);
     window.removeEventListener("hashchange", this._onHash);
     document.removeEventListener("pointerdown", this._vanDropdowna);
+    document.removeEventListener("keydown", this._esc);
     document.removeEventListener("click", this._onClick, true);
     window.removeEventListener("wheel", this._prekid);
     window.removeEventListener("touchstart", this._prekid);
@@ -570,6 +752,12 @@ class Component extends DCLogic {
         window.location.href = "mailto:" + email + "?subject=" +
           encodeURIComponent("Upit sa sajta — " + (d.get("ime") || "")) +
           "&body=" + encodeURIComponent(tekst);
+      },
+      meniOtvoren: !!this.state.meni,
+      otvoriMeni: () => { this._telo(true); this.setState({ meni: true }); },
+      zatvoriMeni: () => { this._telo(false); this.setState({ meni: false }); },
+      zatvoriNaLink: (e) => {
+        if (e.target.closest && e.target.closest("a")) { this._telo(false); this.setState({ meni: false }); }
       },
       jeHome: this.state.strana === "home",
       nijeHome: this.state.strana !== "home",
