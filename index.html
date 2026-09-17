@@ -29,17 +29,24 @@
   @media (max-width: 760px) {
     [data-m="nav"] { display: none !important; }
     [data-m="burger"] { display: flex !important; }
-    [data-m="usluge"], [data-m="brojevi"], [data-m="simke"], [data-m="preporuke"] { grid-template-columns: 1fr !important; }
+    [data-m="usluge"], [data-m="brojevi"], [data-m="simke"], [data-m="preporuke"], [data-m="oMeniGrid"] { grid-template-columns: 1fr !important; }
     [data-m="preporuke"] > div { box-shadow: none !important; transform: none !important; }
+    [data-m="stat"] { grid-template-columns: 1fr !important; gap: 0 !important; }
+    [data-m="stat"] > div { display: flex !important; align-items: baseline; justify-content: space-between; gap: 16px; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,.09); }
+    [data-m="stat"] > div:last-child { border-bottom: none; }
+    [data-m="stat"] > div > p:first-child { margin: 0 !important; font-size: 16px !important; color: #a9a9b2 !important; }
+    [data-m="stat"] > div > p:last-child { font-size: 28px !important; text-align: right; }
     [data-m="red"] { flex-direction: column !important; align-items: flex-start !important; gap: 6px !important; }
     [data-m="desno"] { text-align: left !important; }
     [data-m="brojevi"] p[data-m="oznaka"] { min-height: 0 !important; }
   }
   @media (max-width: 640px) {
     [data-m="hero"] { min-height: 100dvh !important; justify-content: flex-start !important; gap: 28px !important; }
-    [data-m="heroTekst"] { min-height: calc(100dvh - 260px); justify-content: center; gap: 40px !important; }
-    [data-m="heroTekst"] > div:first-child { width: 120px !important; height: 120px !important; }
-    [data-m="heroTekst"] h1 { font-size: 40px !important; max-width: 20ch !important; }
+    [data-m="heroTekst"] { min-height: calc(100dvh - 240px); justify-content: center; gap: 22px !important; }
+    [data-m="heroTekst"] > div:first-child { width: 104px !important; height: 104px !important; }
+    [data-m="cta"] { flex-direction: column !important; align-self: stretch; }
+    [data-m="cta"] a { width: 100% !important; }
+    [data-m="heroTekst"] h1 { font-size: 36px !important; max-width: 22ch !important; }
     [data-m="brMob"] { display: block !important; }
     [data-m="preporuke"] { display: flex !important; grid-template-columns: none !important; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; gap: 14px !important; padding-bottom: 4px; }
     [data-m="preporuke"]::-webkit-scrollbar { display: none; }
@@ -50,6 +57,10 @@
     [data-reveal], [data-m="red"] { opacity: 0; transform: translateY(20px); transition: opacity 560ms ease-out, transform 560ms cubic-bezier(.2,.7,.3,1); }
     [data-reveal].om-vis, [data-m="red"].om-vis { opacity: 1; transform: none; }
   }
+  @keyframes omDim1 { 0% { transform: translate3d(-9.9%,-6.3%,0); } 25% { transform: translate3d(8.1%,-2.7%,0); } 50% { transform: translate3d(11.7%,7.2%,0); } 75% { transform: translate3d(-4.5%,9.9%,0); } 100% { transform: translate3d(-9.9%,-6.3%,0); } }
+  @keyframes omDim2 { 0% { transform: translate3d(9.0%,-7.2%,0); } 25% { transform: translate3d(-7.2%,-1.8%,0); } 50% { transform: translate3d(-10.8%,8.1%,0); } 75% { transform: translate3d(5.4%,10.8%,0); } 100% { transform: translate3d(9.0%,-7.2%,0); } }
+  @keyframes omDim3 { 0% { transform: translate3d(7.2%,8.1%,0); } 25% { transform: translate3d(-9.0%,4.5%,0); } 50% { transform: translate3d(-5.4%,-9.0%,0); } 75% { transform: translate3d(9.9%,-3.6%,0); } 100% { transform: translate3d(7.2%,8.1%,0); } }
+  @keyframes omDim4 { 0% { transform: translate3d(-8.1%,9.0%,0); } 25% { transform: translate3d(9.9%,3.6%,0); } 50% { transform: translate3d(6.3%,-9.9%,0); } 75% { transform: translate3d(-10.8%,-4.5%,0); } 100% { transform: translate3d(-8.1%,9.0%,0); } }
   @keyframes omPojava { from { opacity: 0; } to { opacity: 1; } }
   @keyframes omSpusti { from { transform: translateY(-102%); } to { transform: none; } }
   @keyframes omStavka { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
@@ -151,18 +162,29 @@
 </sc-if>
 
 <main id="gore" style="position:relative;">
-  <div aria-hidden="true" style="position:fixed; inset:0; z-index:0; pointer-events:none; background:radial-gradient(52% 46% at 20% 32%, rgba(118,74,190,.42), rgba(118,74,190,0) 72%), radial-gradient(50% 44% at 82% 26%, rgba(40,120,140,.34), rgba(40,120,140,0) 74%), radial-gradient(46% 40% at 70% 86%, rgba(118,74,190,.26), rgba(118,74,190,0) 74%), radial-gradient(44% 38% at 12% 78%, rgba(40,120,140,.2), rgba(40,120,140,0) 76%), radial-gradient(80% 50% at 50% 50%, rgba(255,255,255,.045), rgba(255,255,255,0) 72%);"></div>
+  <div aria-hidden="true" style="position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;">
+    <div style="position:absolute; inset:-45%; background:radial-gradient(52% 46% at 20% 32%, rgba(118,74,190,.48), rgba(118,74,190,0) 72%); will-change:transform; animation:omDim1 9s linear infinite;"></div>
+    <div style="position:absolute; inset:-45%; background:radial-gradient(50% 44% at 82% 26%, rgba(40,120,140,.4), rgba(40,120,140,0) 74%); will-change:transform; animation:omDim2 11s linear infinite;"></div>
+    <div style="position:absolute; inset:-45%; background:radial-gradient(46% 40% at 70% 86%, rgba(118,74,190,.32), rgba(118,74,190,0) 74%); will-change:transform; animation:omDim3 13s linear infinite;"></div>
+    <div style="position:absolute; inset:-45%; background:radial-gradient(44% 38% at 12% 78%, rgba(40,120,140,.26), rgba(40,120,140,0) 76%); will-change:transform; animation:omDim4 10s linear infinite;"></div>
+    <div style="position:absolute; inset:0; background:radial-gradient(80% 50% at 50% 50%, rgba(255,255,255,.045), rgba(255,255,255,0) 72%);"></div>
+  </div>
   <div aria-hidden="true" style="position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.22; background-image:url('./grain.png'); background-size:256px 256px; background-repeat:repeat;"></div>
   <sc-if value="{{ jeHome }}" hint-placeholder-val="{{ true }}">
 
-  <section data-m="hero" style="position:relative; min-height:calc(100vh - 66px); display:flex; flex-direction:column; justify-content:center; gap:clamp(40px,5.5vw,80px); padding:clamp(60px,7vw,104px) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(32px,4vw,56px);">
-    <div data-m="heroTekst" style="max-width:1040px; margin:0 auto; width:100%; display:flex; flex-direction:column; align-items:center; text-align:center; gap:clamp(28px,3.4vw,48px);">
-      <div style="width:clamp(104px,11vw,132px); height:clamp(104px,11vw,132px); border-radius:50%; overflow:hidden; background:#161616; border:1px solid rgba(255,255,255,.1);">
+  <section data-m="hero" style="position:relative; min-height:calc(100vh - 66px); display:flex; flex-direction:column; justify-content:center; gap:clamp(40px,4.4vw,68px); padding:clamp(56px,6.5vw,96px) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(28px,3vw,44px);">
+    <div data-m="heroTekst" style="max-width:1040px; margin:0 auto; width:100%; display:flex; flex-direction:column; align-items:center; text-align:center; gap:clamp(20px,2.2vw,30px);">
+      <div style="width:clamp(96px,9vw,116px); height:clamp(96px,9vw,116px); border-radius:50%; overflow:hidden; background:#161616; border:1px solid rgba(255,255,255,.1);">
         <img src="./trifke-portret.png" alt="Trifke" style="display:block; width:100%; height:100%; object-fit:cover; object-position:50% 22%;">
       </div>
-      <h1 data-reveal="true" style="margin:0; font-size:round(clamp(32px,4vw,52px), 4px); font-weight:400; line-height:1.18; letter-spacing:-0.022em; color:#ffffff; max-width:26ch; text-wrap:balance;">Ja sam Trifke,<br data-m="brMob" style="display:none;"> gradim digitalna rešenja<br data-m="brMob" style="display:none;"> koja vaš posao čine<br data-m="brMob" style="display:none;"> jednostavnijim i efikasnijim.</h1>
+      <h1 data-reveal="true" style="margin:0; font-size:round(clamp(32px,4vw,52px), 4px); font-weight:400; line-height:1.18; letter-spacing:-0.022em; color:#ffffff; width:100%; max-width:24ch; text-wrap:balance;">Pravim sajtove i aplikacije koje vašem biznisu donose više klijenata.</h1>
+      <p data-reveal="true" style="margin:0; font-size:round(clamp(16px,1.5vw,20px), 4px); font-weight:400; line-height:1.55; color:#c3c3ca; max-width:52ch; text-wrap:pretty;">Sajtovi koji dovode klijente, web aplikacije po meri vašeg posla, zakazivanje, naručivanje, evidencija, i automatizacija koja skida ručni rad sa vrata.</p>
+      <div data-m="cta" style="display:flex; flex-wrap:wrap; justify-content:center; gap:14px; padding-top:clamp(6px,1vw,14px);">
+        <a href="#kontakt" style="display:flex; align-items:center; justify-content:center; flex:none; white-space:nowrap; min-height:48px; padding:0 28px; border-radius:999px; background:#ffffff; color:#0a0a0a; font-size:16px; font-weight:500; transition:opacity 200ms ease-out;" style-hover="opacity:.86; color:#0a0a0a;">Zakaži besplatan poziv</a>
+        <a href="#radovi" style="display:flex; align-items:center; justify-content:center; flex:none; white-space:nowrap; min-height:48px; padding:0 28px; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.05); color:#f2f2f4; font-size:16px; font-weight:500; transition:background 200ms ease-out, border-color 200ms ease-out;" style-hover="background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.34); color:#ffffff;">Pogledaj rezultate</a>
+      </div>
     </div>
-    <div data-om-grananje="true" aria-hidden="true" style="position:relative; max-width:1040px; margin:clamp(-28px,-3vw,-20px) auto clamp(-40px,-5.5vw,-80px); width:100%; height:clamp(56px,6vw,88px); display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:clamp(14px,1.8vw,24px);">
+    <div data-om-grananje="true" aria-hidden="true" style="position:relative; max-width:1040px; margin:clamp(-8px,-0.6vw,0px) auto clamp(-34px,-3vw,-18px); width:100%; height:clamp(72px,7.5vw,108px); display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:clamp(14px,1.8vw,24px);">
       <div style="position:absolute; top:38%; left:calc((100% - 2 * clamp(14px,1.8vw,24px)) / 6); right:calc((100% - 2 * clamp(14px,1.8vw,24px)) / 6); height:1px; background:rgba(255,255,255,.4); box-shadow:0 0 8px rgba(255,255,255,.28);"></div>
       <div style="position:relative;">
         <div style="position:absolute; top:38%; bottom:0; left:50%; width:1px; background:linear-gradient(180deg, rgba(255,255,255,.1) 0%, rgba(255,255,255,.5) 100%); box-shadow:0 0 8px rgba(255,255,255,.28);"></div>
@@ -192,7 +214,7 @@
       </div>
     </div>
     </div>
-    <div data-om-grananje-m="true" aria-hidden="true" style="display:none; position:relative; max-width:1040px; margin:-34px auto -18px; width:100%; height:72px;">
+    <div data-om-grananje-m="true" aria-hidden="true" style="display:none; position:relative; max-width:1040px; margin:-30px auto -14px; width:100%; height:64px;">
       <div style="position:absolute; top:0; bottom:0; left:calc(50% - 0.5px); width:1px; background:linear-gradient(180deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.5) 100%); box-shadow:0 0 8px rgba(255,255,255,.24);"></div>
       <div style="position:absolute; top:-3px; left:calc(50% - 3px); width:6px; height:6px; border-radius:50%; background:#ffffff; box-shadow:0 0 14px rgba(255,255,255,.5);"></div>
       <div style="position:absolute; bottom:-3px; left:calc(50% - 3px); width:6px; height:6px; border-radius:50%; background:#ffffff; box-shadow:0 0 14px rgba(255,255,255,.55);"></div>
@@ -332,7 +354,7 @@
   <sc-if value="{{ jeOMeni }}" hint-placeholder-val="{{ false }}">
 
     <section style="position:relative; padding:clamp(112px,10vw,140px) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(24px,3vw,40px);">
-      <div data-m="usluge" style="display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.6fr); gap:clamp(16px,2.4vw,40px);">
+      <div data-m="stat" style="display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.6fr); gap:clamp(16px,2.4vw,40px);">
         <div>
           <p style="margin:0 0 10px; font-size:round(clamp(12px,1.6vw,16px), 4px); line-height:1.3; color:#cdcdd3;">Kodiram od</p>
           <p style="margin:0; font-size:round(clamp(16px,3.5vw,60px), 4px); font-weight:400; line-height:1.04; letter-spacing:-0.03em; color:#ffffff;">2024</p>
@@ -349,11 +371,16 @@
     </section>
 
     <section style="position:relative; padding:clamp(28px,3.4vw,48px) max(clamp(32px,7.8vw,156px), calc((100% - 1040px) / 2)) clamp(24px,3vw,40px);">
+      <div data-m="oMeniGrid" style="display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,0.85fr); align-items:start; gap:clamp(28px,4vw,64px);">
       <div style="max-width:74ch; display:flex; flex-direction:column; gap:clamp(20px,2.4vw,32px);">
         <p style="margin:0; font-size:round(clamp(20px,1.6vw,24px), 4px); line-height:1.6; color:#dcdce0; text-wrap:pretty;">Počelo je tako što sam hteo da napravim sajt za sebe. Otvorio sam prazan fajl, ukucao prvi naslov i to me je zadržalo. Od tada uglavnom pravim sajtove.</p>
         <p style="margin:0; font-size:round(clamp(20px,1.6vw,24px), 4px); line-height:1.6; color:#dcdce0; text-wrap:pretty;">Dizajn i izradu sajtova učio sam kroz edukaciju Nauči dizajn, a dalje kroz svoje projekte i rad sa klijentima. Prvi sajt koji je nekome zaista rešavao problem napravio sam 2025. za bistro iz Zrenjanina, gde su rezervacije do tada stizale samo telefonom, tokom smene. Tada mi je postalo jasno da dobar sajt nije samo lep dizajn, već alat koji vlasniku skida problem sa vrata.</p>
         <p style="margin:0; font-size:round(clamp(20px,1.6vw,24px), 4px); line-height:1.6; color:#dcdce0; text-wrap:pretty;">Radim samostalno i javljam se lično. Nemam deset godina iskustva i ne pravim se da imam, ali iza sebe imam projekte koje sam radio za sebe, kroz vežbu i za klijente. Zato mogu da se posvetim i manjim biznisima kojima velike agencije često nisu najbolja opcija.</p>
         <p style="margin:0; font-size:round(clamp(20px,1.6vw,24px), 4px); line-height:1.6; color:#dcdce0; text-wrap:pretty;">Radim sa HTML-om, CSS-om i JavaScriptom i trudim se da sve bude jednostavno, brzo i lako za održavanje. Prvi razgovor i procena su besplatni, cenu dogovaramo unapred, a 30 dana nakon predaje izmene radim bez dodatne naplate.</p>
+      </div>
+        <div data-reveal="true" style="position:relative; overflow:hidden; border-radius:28px; border:1px solid rgba(255,255,255,.1); background:#111114; aspect-ratio:4 / 5;">
+          <img src="./trifke-portret.png" alt="Trifke" style="display:block; width:100%; height:100%; object-fit:cover; object-position:50% 24%;">
+        </div>
       </div>
     </section>
 
