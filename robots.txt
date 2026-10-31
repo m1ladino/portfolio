@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://m1ladino.github.io/portfolio/sitemap.xml
+Sitemap: https://www.trifkedesign.com/sitemap.xml
